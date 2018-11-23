@@ -38,8 +38,12 @@ openssl-build :
 j9vm-build : openssl-build
 	+$(OPENJ9_MAKE) OPENJDK_VERSION_NUMBER_FOUR_POSITIONS=$(VERSION_NUMBER_FOUR_POSITIONS) build-j9
 
-j9vm-compose-buildjvm : j9vm-build
+j9vm-compose-buildjvm : images-only
 	+$(OPENJ9_MAKE) stage_openj9_build_jdk
+	# TODO try this
+	$(JDK_IMAGE_DIR)/bin/java -version
+	# create file with build information in native libraries folder to identify which build the libraries belong to
+	$(JDK_IMAGE_DIR)/bin/java -version > $(IMAGES_OUTPUTDIR)/test/openj9/java-version.txt 2>&1
 
 images :: test-image
 

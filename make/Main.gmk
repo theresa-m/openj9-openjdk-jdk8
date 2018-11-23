@@ -142,11 +142,6 @@ images-only: start-make
 	@($(CD) $(JDK_TOPDIR)/make && $(BUILD_LOG_WRAPPER) $(MAKE) $(MAKE_ARGS) -f BuildJdk.gmk images)
 	@$(call TargetExit)
 
-	# if it works here I can just create a new target in closed for this to call
-	$(JDK_IMAGE_DIR)/bin/java -version
-	# create file with build information in native libraries folder to identify which build the libraries belong to
-	$(JDK_IMAGE_DIR)/bin/java -version > $(IMAGES_OUTPUTDIR)/test/openj9/java-version.txt 2>&1
-
 overlay-images: source-tips demos overlay-images-only
 overlay-images-only: start-make
 	@$(call TargetEnter)
