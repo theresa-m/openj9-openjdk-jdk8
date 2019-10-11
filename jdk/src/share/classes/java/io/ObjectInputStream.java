@@ -352,7 +352,7 @@ public class ObjectInputStream
      implements PrivilegedAction<Boolean> {
  public Boolean run() {
      String property =
-         System.getProperty("com.ibm.enableClassCaching", "false");
+         System.getProperty("com.ibm.enableClassCaching", "true");
      return property.equalsIgnoreCase("true");
  }
  }
@@ -495,7 +495,7 @@ public class ObjectInputStream
         }
 
         ClassLoader oldCachedLudcl = null;
-	boolean setCached = false;
+        boolean setCached = false;
 	
 	if ((curContext == null) && (isClassCachingEnabled)) {
             oldCachedLudcl = cachedLudcl;
@@ -503,8 +503,9 @@ public class ObjectInputStream
             // If caller is not provided, follow the standard path to get the cachedLudcl.
             // Otherwise use the class loader provided by JIT as the cachedLudcl.
 
+
             if (caller == null) {
-                 cachedLudcl = latestUserDefinedLoader();
+                 cachedLudcl = null;
             }else{
                  cachedLudcl = caller.getClassLoader();
             }
@@ -611,7 +612,7 @@ public class ObjectInputStream
 
         if ((curContext == null) && (isClassCachingEnabled)) {
             oldCachedLudcl = cachedLudcl;
-            cachedLudcl = latestUserDefinedLoader();
+            cachedLudcl = null;
             setCached = true;
         }
 
@@ -788,7 +789,7 @@ public class ObjectInputStream
         try {
         	return ((classCache == null) ?
         	        Class.forName(name, false, latestUserDefinedLoader()) :
-        	        classCache.get(name, cachedLudcl));
+        	        classCache.get(name, (null == cachedLudcl) ? latestUserDefinedLoader() : cachedLudcl));
            	
         } catch (ClassNotFoundException ex) {
             Class<?> cl = primClasses.get(name);
