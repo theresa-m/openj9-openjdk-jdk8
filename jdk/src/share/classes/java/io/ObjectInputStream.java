@@ -524,7 +524,7 @@ public class ObjectInputStream
             if (depth == 0) {
                 vlist.doCallbacks();
             }
-            return obj;
+            return obj;f
         } finally {
             passHandle = outerHandle;
             if (setCached) {
@@ -785,18 +785,16 @@ public class ObjectInputStream
         throws IOException, ClassNotFoundException
     {
         String name = desc.getName();
+        Object ludcl = latestUserDefinedLoader();
         try {
         	return ((classCache == null) ?
         	        Class.forName(name, false, latestUserDefinedLoader()) :
         	        classCache.get(name, cachedLudcl));
            	
         } catch (ClassNotFoundException ex) {
-            Class<?> cl = primClasses.get(name);
-            if (cl != null) {
-                return cl;
-            } else {
-                throw ex;
-            }
+            throw new ClassNotFoundException("cached ludcl: " + cachedLudcl.getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl)
+            + "\nactual ludcl here: " + ludcl.getName() + " : " + ludcl.hashCode() + " : " + System.identityHashCode(ludcl)
+            );
         }
     }
 
