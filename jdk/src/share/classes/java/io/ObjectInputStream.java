@@ -513,6 +513,8 @@ public class ObjectInputStream
             }
 
             setCached = true;
+
+            result += "cached ludcl: " + cachedLudcl.getClass().getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl);
         }
 
         // if nested read, passHandle contains handle of enclosing object
@@ -795,9 +797,9 @@ public class ObjectInputStream
         	        classCache.get(name, cachedLudcl));
            	
         } catch (ClassNotFoundException ex) {
-            throw new ClassNotFoundException("cached ludcl: " + cachedLudcl.getClass().getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl)
-            + "\nactual ludcl here: " + ludcl.getClass().getName() + " : " + ludcl.hashCode() + " : " + System.identityHashCode(ludcl) 
-             + "\n" + result);
+            throw new ClassNotFoundException(result
+            + "actual ludcl here: " + ludcl.getClass().getName() + " : " + ludcl.hashCode() + " : " + System.identityHashCode(ludcl) 
+             + "\n");
         }
     }
 
