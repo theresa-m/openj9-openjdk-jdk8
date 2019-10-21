@@ -524,7 +524,7 @@ public class ObjectInputStream
             if (depth == 0) {
                 vlist.doCallbacks();
             }
-            return obj;f
+            return obj;
         } finally {
             passHandle = outerHandle;
             if (setCached) {
