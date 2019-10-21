@@ -2394,7 +2394,11 @@ public class ObjectInputStream
             result += "i in defaultReadFields is " + i + "\n";
             ObjectStreamField f = fields[numPrimFields + i];
             objVals[i] = readObject0(f.isUnshared()); // this one
-            result += "objVals is: " + objVals[i].getClass().getName();
+            if (objVals[i] == null) {
+                result += "objVals[i] is null\n";
+            } else {
+                result += "objVals is: " + objVals[i].getClass().getName() + " hash: " + objVals[i].hashCode() + "\n";
+            }
             if (f.getField() != null) {
                 handles.markDependency(objHandle, passHandle);
             }
