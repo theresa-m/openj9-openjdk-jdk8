@@ -220,6 +220,9 @@ import sun.util.logging.PlatformLogger;
 public class ObjectInputStream
     extends InputStream implements ObjectInput, ObjectStreamConstants
 {
+
+    String result = "";
+
     /** handle value representing null */
     private static final int NULL_HANDLE = -1;
 
@@ -793,8 +796,8 @@ public class ObjectInputStream
            	
         } catch (ClassNotFoundException ex) {
             throw new ClassNotFoundException("cached ludcl: " + cachedLudcl.getClass().getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl)
-            + "\nactual ludcl here: " + ludcl.getClass().getName() + " : " + ludcl.hashCode() + " : " + System.identityHashCode(ludcl)
-            );
+            + "\nactual ludcl here: " + ludcl.getClass().getName() + " : " + ludcl.hashCode() + " : " + System.identityHashCode(ludcl) 
+             + "\n" + result);
         }
     }
 
@@ -2268,6 +2271,7 @@ public class ObjectInputStream
 
             if (slots[i].hasData) {
                 if (obj == null || handles.lookupException(passHandle) != null) {
+                    result += " i in readSerialData is " + i + "\n";
                     defaultReadFields(null, slotDesc); // skip field values
                 } else if (slotDesc.hasReadObjectMethod()) {
                     ThreadDeath t = null;
@@ -2312,8 +2316,8 @@ public class ObjectInputStream
                      */
                     defaultDataEnd = false;
                 } else {
-                    defaultReadFields(obj, slotDesc);
-                    }
+                    defaultReadFields(obj, slotDesc); // this one
+                }
 
                 if (slotDesc.hasWriteObjectData()) {
                     skipCustomData();
@@ -2387,8 +2391,10 @@ public class ObjectInputStream
         Object[] objVals = new Object[desc.getNumObjFields()];
         int numPrimFields = fields.length - objVals.length;
         for (int i = 0; i < objVals.length; i++) {
+            result += "i in defaultReadFields is " + i "\n";
             ObjectStreamField f = fields[numPrimFields + i];
-            objVals[i] = readObject0(f.isUnshared());
+            objVals[i] = readObject0(f.isUnshared()); // this one
+            result += "objVals is: " + objVals[i].getClass().getName();
             if (f.getField() != null) {
                 handles.markDependency(objHandle, passHandle);
             }
