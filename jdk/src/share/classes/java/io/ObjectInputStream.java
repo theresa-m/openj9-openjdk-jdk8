@@ -2397,7 +2397,7 @@ public class ObjectInputStream
             if (objVals[i] == null) {
                 result += "objVals[i] is null\n";
             } else {
-                result += "objVals is: " + objVals[i].getClass().getName() + " hash: " + objVals[i].hashCode() + "\n";
+                result += "objVals is: " + objVals[i].getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
             }
             if (f.getField() != null) {
                 handles.markDependency(objHandle, passHandle);
