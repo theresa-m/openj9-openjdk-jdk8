@@ -2391,7 +2391,7 @@ public class ObjectInputStream
         Object[] objVals = new Object[desc.getNumObjFields()];
         int numPrimFields = fields.length - objVals.length;
         for (int i = 0; i < objVals.length; i++) {
-            result += "i in defaultReadFields is " + i "\n";
+            result += "i in defaultReadFields is " + i + "\n";
             ObjectStreamField f = fields[numPrimFields + i];
             objVals[i] = readObject0(f.isUnshared()); // this one
             result += "objVals is: " + objVals[i].getClass().getName();
