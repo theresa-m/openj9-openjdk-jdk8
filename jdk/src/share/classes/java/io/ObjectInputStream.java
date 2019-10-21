@@ -352,7 +352,7 @@ public class ObjectInputStream
      implements PrivilegedAction<Boolean> {
  public Boolean run() {
      String property =
-         System.getProperty("com.ibm.enableClassCaching", "false");
+         System.getProperty("com.ibm.enableClassCaching", "true");
      return property.equalsIgnoreCase("true");
  }
  }
