@@ -477,7 +477,6 @@ public class ObjectInputStream
     private static Object redirectedReadObject(ObjectInputStream iStream, Class caller)
             throws ClassNotFoundException, IOException
     {
-        result += "call redirectedReadObject to readObjectImpl\n";
         return iStream.readObjectImpl(caller);
     }
 
@@ -494,6 +493,7 @@ public class ObjectInputStream
     private Object readObjectImpl(Class caller)
                throws ClassNotFoundException, IOException
     {
+        if (caller != null) result += "call redirectedReadObject to readObjectImpl\n";
         ClassLoader cl = latestUserDefinedLoader();
         result += "actual ludcl readObjectImpl start: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
 
