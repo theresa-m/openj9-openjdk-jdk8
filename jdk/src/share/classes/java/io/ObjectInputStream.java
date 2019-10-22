@@ -2229,6 +2229,7 @@ public class ObjectInputStream
             handles.lookupException(passHandle) == null &&
             desc.hasReadResolveMethod())
         {
+            result += "invoking happening here on " + obj.getClass().getName() + "\n";
             Object rep = desc.invokeReadResolve(obj);
             if (unshared && rep.getClass().isArray()) {
                 rep = cloneArray(rep);
@@ -2383,6 +2384,7 @@ public class ObjectInputStream
                     slotDesc.hasReadObjectNoDataMethod() &&
                     handles.lookupException(passHandle) == null)
                 {
+                    result += "invoking object here: " + obj.getClass().getName() + "\n";
                     slotDesc.invokeReadObjectNoData(obj);
                 }
             }
