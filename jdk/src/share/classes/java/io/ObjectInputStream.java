@@ -2215,12 +2215,12 @@ public class ObjectInputStream
             result += "readExternalData\n";
             readExternalData((Externalizable) obj, desc);
         } else {
-            readSerialData(obj, desc);
             if (obj == null) {
                 result += "readSerialData obj is null\n";
             } else {
                 result += "readSerialData obj is: " + obj.getClass().getName() +"\n";
             }
+            readSerialData(obj, desc);
         }
 
         handles.finish(passHandle);
@@ -2331,6 +2331,11 @@ public class ObjectInputStream
                         curContext = new SerialCallbackContext(obj, slotDesc);
 
                         bin.setBlockDataMode(true);
+                        if (obj == null) {
+                            result += "object to be invoked is null\n";
+                        } else {
+                            result += "object to be invoked is " + obj.getClass().getName() + "\n";
+                        }
                         slotDesc.invokeReadObject(obj, this);
                     } catch (ClassNotFoundException ex) {
                         /*
