@@ -456,6 +456,7 @@ public class ObjectInputStream
     public final Object readObject()
         throws IOException, ClassNotFoundException
     {
+        result += "call readObject to readObjectImpl\n";
         return readObjectImpl(null);
     }
 
@@ -476,6 +477,7 @@ public class ObjectInputStream
     private static Object redirectedReadObject(ObjectInputStream iStream, Class caller)
             throws ClassNotFoundException, IOException
     {
+        result += "call redirectedReadObject to readObjectImpl\n";
         return iStream.readObjectImpl(caller);
     }
 
@@ -492,6 +494,8 @@ public class ObjectInputStream
     private Object readObjectImpl(Class caller)
                throws ClassNotFoundException, IOException
     {
+        ClassLoader cl = latestUserDefinedLoader();
+        result += "actual ludcl readObjectImpl start: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
 
         if (enableOverride) {
             return readObjectOverride();
@@ -515,6 +519,14 @@ public class ObjectInputStream
             setCached = true;
 
             result += "cached ludcl: " + cachedLudcl.getClass().getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl) + "\n";
+        } else {
+                result += "cache was not refreshed ";
+            if (cachedLudcl == null) {
+                result += "cached ludcl is null ";
+            } else {
+                result += "cached ludcl: " + cachedLudcl.getClass().getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl) + "\n";
+            }
+            
         }
 
         // if nested read, passHandle contains handle of enclosing object
@@ -526,7 +538,7 @@ public class ObjectInputStream
             } else {
                 result += "readObjectImpl obj is: " + obj.getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
             }
-            ClassLoader cl = latestUserDefinedLoader();
+            cl = latestUserDefinedLoader();
             result += "actual ludcl readObjectImpl here: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
 
             handles.markDependency(outerHandle, passHandle);
@@ -1672,6 +1684,9 @@ public class ObjectInputStream
         depth++;
         totalObjectRefs++;
         result += "tc is: " + tc + "\n";
+        ClassLoader ludcl = latestUserDefinedLoader();
+        result += "actual ludcl readObject0 here: " + ludcl.getClass().getName() + " : " + ludcl.hashCode() + " : " + System.identityHashCode(ludcl) + "\n";
+
         try {
             switch (tc) {
                 case TC_NULL:
@@ -1698,6 +1713,7 @@ public class ObjectInputStream
                     return checkResolve(readEnum(unshared));
 
                 case TC_OBJECT: // 115
+                    result += "call readOrdinaryObject\n";
                     Object obj = readOrdinaryObject(unshared);
                     if (obj == null){
                         result += "readOrdinaryObject resuls is null\n";
