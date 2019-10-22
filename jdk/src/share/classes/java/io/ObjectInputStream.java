@@ -514,7 +514,7 @@ public class ObjectInputStream
 
             setCached = true;
 
-            result += "cached ludcl: " + cachedLudcl.getClass().getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl);
+            result += "cached ludcl: " + cachedLudcl.getClass().getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl) + "\n";
         }
 
         // if nested read, passHandle contains handle of enclosing object
@@ -869,7 +869,7 @@ public class ObjectInputStream
      * @see ObjectOutputStream#annotateProxyClass(Class)
      * @since 1.3
      */
-    protected Class<?> resolveProxyClass(String[] interfaces)
+    protected Class<?> resolveProxyClass(String[] interfaces) // TODO maybe here!!!
         throws IOException, ClassNotFoundException
     {
         ClassLoader latestLoader = latestUserDefinedLoader();
@@ -879,7 +879,7 @@ public class ObjectInputStream
         // define proxy in class loader of non-public interface(s), if any
         Class<?>[] classObjs = new Class<?>[interfaces.length];
         for (int i = 0; i < interfaces.length; i++) {
-            Class<?> cl = Class.forName(interfaces[i], false, latestLoader);
+            Class<?> cl = Class.forName(interfaces[i], false, latestLoader); // MER class.forName also resolved here!
             if ((cl.getModifiers() & Modifier.PUBLIC) == 0) {
                 if (hasNonPublicInterface) {
                     if (nonPublicLoader != cl.getClassLoader()) {
@@ -2430,6 +2430,8 @@ public class ObjectInputStream
         int numPrimFields = fields.length - objVals.length;
         for (int i = 0; i < objVals.length; i++) {
             result += "i in defaultReadFields is " + i + "\n";
+            ClassLoader ludcl = latestUserDefinedLoader();
+            result += "actual ludcl here: " + ludcl.getClass().getName() + " : " + ludcl.hashCode() + " : " + System.identityHashCode(ludcl) + "\n";
             ObjectStreamField f = fields[numPrimFields + i];
             objVals[i] = readObject0(f.isUnshared()); // this one
             if (objVals[i] == null) {
@@ -2437,7 +2439,7 @@ public class ObjectInputStream
             } else {
                 result += "defaultReadFields objVals is: " + objVals[i].getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
             }
-            ClassLoader ludcl = latestUserDefinedLoader();
+            ludcl = latestUserDefinedLoader();
             result += "actual ludcl here: " + ludcl.getClass().getName() + " : " + ludcl.hashCode() + " : " + System.identityHashCode(ludcl) + "\n";
             if (f.getField() != null) {
                 handles.markDependency(objHandle, passHandle);
