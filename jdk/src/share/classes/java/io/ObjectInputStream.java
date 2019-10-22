@@ -521,6 +521,11 @@ public class ObjectInputStream
         int outerHandle = passHandle;
         try {
             Object obj = readObject0(false);
+            if (obj == null) {
+                result += "readObjectImpl obj is null\n";
+            } else {
+                result += "readObjectImpl obj is: " + obj.getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
+            }
             handles.markDependency(outerHandle, passHandle);
             ClassNotFoundException ex = handles.lookupException(passHandle);
             if (ex != null) {
@@ -624,6 +629,11 @@ public class ObjectInputStream
         int outerHandle = passHandle;
         try {
             Object obj = readObject0(true);
+            if (obj == null) {
+                result += "readUnshared obj is null\n";
+            } else {
+                result += "readUnshared obj is: " + obj.getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
+            }
             handles.markDependency(outerHandle, passHandle);
             ClassNotFoundException ex = handles.lookupException(passHandle);
             if (ex != null) {
@@ -2056,7 +2066,12 @@ public class ObjectInputStream
 
         if (ccl == null) {
             for (int i = 0; i < len; i++) {
-                readObject0(false);
+                Object obj = readObject0(false);
+                if (obj == null) {
+                    result += "readArray obj is null\n";
+                } else {
+                    result += "readArray obj is: " + obj.getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
+                }
             }
         } else if (ccl.isPrimitive()) {
             if (ccl == Integer.TYPE) {
@@ -2082,6 +2097,11 @@ public class ObjectInputStream
             Object[] oa = (Object[]) array;
             for (int i = 0; i < len; i++) {
                 oa[i] = readObject0(false);
+                if (oa[i] == null) {
+                    result += "readArray2 obj is null\n";
+                } else {
+                    result += "readArray2 obj is: " + oa[i].getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
+                }
                 handles.markDependency(arrayHandle, passHandle);
             }
         }
@@ -2360,7 +2380,12 @@ public class ObjectInputStream
                     return;
 
                 default:
-                    readObject0(false);
+                    Object obj = readObject0(false);
+                    if (obj == null) {
+                        result += "skipCustomData obj is null\n";
+                    } else {
+                        result += "skipCustomData obj is: " + obj.getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
+                    }
                     break;
             }
         }
@@ -2397,9 +2422,9 @@ public class ObjectInputStream
             ObjectStreamField f = fields[numPrimFields + i];
             objVals[i] = readObject0(f.isUnshared()); // this one
             if (objVals[i] == null) {
-                result += "objVals[i] is null\n";
+                result += "defaultReadFields objVals[i] is null\n";
             } else {
-                result += "objVals is: " + objVals[i].getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
+                result += "defaultReadFields objVals is: " + objVals[i].getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
             }
             if (f.getField() != null) {
                 handles.markDependency(objHandle, passHandle);
@@ -2421,6 +2446,7 @@ public class ObjectInputStream
             throw new InternalError();
         }
         clear();
+        result += "readFatalException\n";
         return (IOException) readObject0(false);
     }
 
@@ -2566,6 +2592,11 @@ public class ObjectInputStream
             for (int i = 0; i < objVals.length; i++) {
                 objVals[i] =
                     readObject0(fields[numPrimFields + i].isUnshared());
+                if (objVals[i] == null) {
+                    result += "readFields obj is null\n";
+                } else {
+                    result += "readFields obj is: " + objVals[i].getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
+                }
                 objHandles[i] = passHandle;
             }
             passHandle = oldHandle;
