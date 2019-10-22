@@ -2077,8 +2077,8 @@ public class ObjectInputStream
                 } else {
                     result += "readArray obj is: " + obj.getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
                 }
-                ClassLoader cl = latestUserDefinedLoader();
-                result += "actual ludcl here: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
+                ClassLoader ludcl = latestUserDefinedLoader();
+                result += "actual ludcl here: " + ludcl.getClass().getName() + " : " + ludcl.hashCode() + " : " + System.identityHashCode(ludcl) + "\n";
             }
         } else if (ccl.isPrimitive()) {
             if (ccl == Integer.TYPE) {
@@ -2437,8 +2437,8 @@ public class ObjectInputStream
             } else {
                 result += "defaultReadFields objVals is: " + objVals[i].getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
             }
-            ClassLoader cl = latestUserDefinedLoader();
-            result += "actual ludcl here: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
+            ClassLoader ludcl = latestUserDefinedLoader();
+            result += "actual ludcl here: " + ludcl.getClass().getName() + " : " + ludcl.hashCode() + " : " + System.identityHashCode(ludcl) + "\n";
             if (f.getField() != null) {
                 handles.markDependency(objHandle, passHandle);
             }
