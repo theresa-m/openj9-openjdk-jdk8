@@ -876,6 +876,8 @@ public class ObjectInputStream
         ClassLoader nonPublicLoader = null;
         boolean hasNonPublicInterface = false;
 
+        result += "resolve proxy class with latest loader " + latestLoader.getClass().getName() + " : " + latestLoader.hashCode() + " : " + System.identityHashCode(cachedLudcl) + "\n";
+
         // define proxy in class loader of non-public interface(s), if any
         Class<?>[] classObjs = new Class<?>[interfaces.length];
         for (int i = 0; i < interfaces.length; i++) {
@@ -891,6 +893,7 @@ public class ObjectInputStream
                     hasNonPublicInterface = true;
                 }
             }
+            result += "proxy class is: " + cl.getName() + "\n";
             classObjs[i] = cl;
         }
         try {
