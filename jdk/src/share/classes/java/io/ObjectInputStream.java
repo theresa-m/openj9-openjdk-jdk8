@@ -526,6 +526,9 @@ public class ObjectInputStream
             } else {
                 result += "readObjectImpl obj is: " + obj.getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
             }
+            ClassLoader cl = latestUserDefinedLoader();
+            result += "actual ludcl here: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
+
             handles.markDependency(outerHandle, passHandle);
             ClassNotFoundException ex = handles.lookupException(passHandle);
             if (ex != null) {
@@ -634,6 +637,8 @@ public class ObjectInputStream
             } else {
                 result += "readUnshared obj is: " + obj.getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
             }
+            ClassLoader cl = latestUserDefinedLoader();
+            result += "actual ludcl here: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
             handles.markDependency(outerHandle, passHandle);
             ClassNotFoundException ex = handles.lookupException(passHandle);
             if (ex != null) {
@@ -2072,6 +2077,8 @@ public class ObjectInputStream
                 } else {
                     result += "readArray obj is: " + obj.getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
                 }
+                ClassLoader cl = latestUserDefinedLoader();
+                result += "actual ludcl here: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
             }
         } else if (ccl.isPrimitive()) {
             if (ccl == Integer.TYPE) {
@@ -2102,6 +2109,8 @@ public class ObjectInputStream
                 } else {
                     result += "readArray2 obj is: " + oa[i].getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
                 }
+                ClassLoader cl2 = latestUserDefinedLoader();
+                result += "actual ludcl here: " + cl2.getClass().getName() + " : " + cl2.hashCode() + " : " + System.identityHashCode(cl2) + "\n";
                 handles.markDependency(arrayHandle, passHandle);
             }
         }
@@ -2386,6 +2395,8 @@ public class ObjectInputStream
                     } else {
                         result += "skipCustomData obj is: " + obj.getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
                     }
+                    ClassLoader cl = latestUserDefinedLoader();
+                    result += "actual ludcl here: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
                     break;
             }
         }
@@ -2426,6 +2437,8 @@ public class ObjectInputStream
             } else {
                 result += "defaultReadFields objVals is: " + objVals[i].getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
             }
+            ClassLoader cl = latestUserDefinedLoader();
+            result += "actual ludcl here: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
             if (f.getField() != null) {
                 handles.markDependency(objHandle, passHandle);
             }
@@ -2597,6 +2610,8 @@ public class ObjectInputStream
                 } else {
                     result += "readFields obj is: " + objVals[i].getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
                 }
+                ClassLoader cl = latestUserDefinedLoader();
+                result += "actual ludcl here: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
                 objHandles[i] = passHandle;
             }
             passHandle = oldHandle;
