@@ -2351,7 +2351,7 @@ public class ObjectInputStream
                      */
                     defaultDataEnd = false;
                 } else {
-                    result += "second defaultReadFields from readSerialData\n"
+                    result += "second defaultReadFields from readSerialData\n";
                     defaultReadFields(obj, slotDesc); // this one
                 }
 
