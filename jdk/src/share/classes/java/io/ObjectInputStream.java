@@ -1697,8 +1697,14 @@ public class ObjectInputStream
                 case TC_ENUM:
                     return checkResolve(readEnum(unshared));
 
-                case TC_OBJECT:
-                    return checkResolve(readOrdinaryObject(unshared));
+                case TC_OBJECT: // 115
+                    Object obj = readOrdinaryObject(unshared);
+                    if (obj == null){
+                        result += "readOrdinaryObject resuls is null\n";
+                    } else {
+                        result += "readOrdinaryObject result is: " + obj.getClass().getName() + "\n";
+                    }
+                    return checkResolve(obj);
 
                 case TC_EXCEPTION:
                     IOException ex = readFatalException();
