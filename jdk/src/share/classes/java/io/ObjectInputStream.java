@@ -2212,8 +2212,10 @@ public class ObjectInputStream
         }
 
         if (desc.isExternalizable()) {
+            result += "readExternalData\n";
             readExternalData((Externalizable) obj, desc);
         } else {
+            result += "readSerialData\n";
             readSerialData(obj, desc);
         }
 
