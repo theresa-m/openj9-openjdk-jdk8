@@ -2215,8 +2215,12 @@ public class ObjectInputStream
             result += "readExternalData\n";
             readExternalData((Externalizable) obj, desc);
         } else {
-            result += "readSerialData\n";
             readSerialData(obj, desc);
+            if (obj == null) {
+                result += "readSerialData obj is null\n";
+            } else {
+                result += "readSerialData obj is: " + obj.getClass().getName() +"\n";
+            }
         }
 
         handles.finish(passHandle);
@@ -2317,6 +2321,7 @@ public class ObjectInputStream
                     result += " i in readSerialData is " + i + "\n";
                     defaultReadFields(null, slotDesc); // skip field values
                 } else if (slotDesc.hasReadObjectMethod()) {
+                    result += "other case in readSerialData\n";
                     ThreadDeath t = null;
                     boolean reset = false;
                     SerialCallbackContext oldContext = curContext;
