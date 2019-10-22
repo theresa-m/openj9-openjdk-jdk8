@@ -527,7 +527,7 @@ public class ObjectInputStream
                 result += "readObjectImpl obj is: " + obj.getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
             }
             ClassLoader cl = latestUserDefinedLoader();
-            result += "actual ludcl here: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
+            result += "actual ludcl readObjectImpl here: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
 
             handles.markDependency(outerHandle, passHandle);
             ClassNotFoundException ex = handles.lookupException(passHandle);
@@ -638,7 +638,7 @@ public class ObjectInputStream
                 result += "readUnshared obj is: " + obj.getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
             }
             ClassLoader cl = latestUserDefinedLoader();
-            result += "actual ludcl here: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
+            result += "actual ludcl readUnshared ere: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
             handles.markDependency(outerHandle, passHandle);
             ClassNotFoundException ex = handles.lookupException(passHandle);
             if (ex != null) {
@@ -813,7 +813,7 @@ public class ObjectInputStream
            	
         } catch (ClassNotFoundException ex) {
             throw new ClassNotFoundException(result
-            + "actual ludcl here: " + ludcl.getClass().getName() + " : " + ludcl.hashCode() + " : " + System.identityHashCode(ludcl) 
+            + "actual ludcl resolveClass here: " + ludcl.getClass().getName() + " : " + ludcl.hashCode() + " : " + System.identityHashCode(ludcl) 
              + "\n");
         }
     }
@@ -1671,6 +1671,7 @@ public class ObjectInputStream
 
         depth++;
         totalObjectRefs++;
+        result += "tc is: " + tc + "\n";
         try {
             switch (tc) {
                 case TC_NULL:
@@ -2081,7 +2082,7 @@ public class ObjectInputStream
                     result += "readArray obj is: " + obj.getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
                 }
                 ClassLoader ludcl = latestUserDefinedLoader();
-                result += "actual ludcl here: " + ludcl.getClass().getName() + " : " + ludcl.hashCode() + " : " + System.identityHashCode(ludcl) + "\n";
+                result += "actual ludcl readArray here: " + ludcl.getClass().getName() + " : " + ludcl.hashCode() + " : " + System.identityHashCode(ludcl) + "\n";
             }
         } else if (ccl.isPrimitive()) {
             if (ccl == Integer.TYPE) {
@@ -2113,7 +2114,7 @@ public class ObjectInputStream
                     result += "readArray2 obj is: " + oa[i].getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
                 }
                 ClassLoader cl2 = latestUserDefinedLoader();
-                result += "actual ludcl here: " + cl2.getClass().getName() + " : " + cl2.hashCode() + " : " + System.identityHashCode(cl2) + "\n";
+                result += "actual ludcl readArray2 here: " + cl2.getClass().getName() + " : " + cl2.hashCode() + " : " + System.identityHashCode(cl2) + "\n";
                 handles.markDependency(arrayHandle, passHandle);
             }
         }
@@ -2350,6 +2351,7 @@ public class ObjectInputStream
                      */
                     defaultDataEnd = false;
                 } else {
+                    result += "second defaultReadFields from readSerialData\n"
                     defaultReadFields(obj, slotDesc); // this one
                 }
 
@@ -2399,7 +2401,7 @@ public class ObjectInputStream
                         result += "skipCustomData obj is: " + obj.getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
                     }
                     ClassLoader cl = latestUserDefinedLoader();
-                    result += "actual ludcl here: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
+                    result += "actual ludcl skipCustomData here: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
                     break;
             }
         }
@@ -2434,7 +2436,7 @@ public class ObjectInputStream
         for (int i = 0; i < objVals.length; i++) {
             result += "i in defaultReadFields is " + i + "\n";
             ClassLoader ludcl = latestUserDefinedLoader();
-            result += "actual ludcl here: " + ludcl.getClass().getName() + " : " + ludcl.hashCode() + " : " + System.identityHashCode(ludcl) + "\n";
+            result += "actual ludcl defaultReadFields here: " + ludcl.getClass().getName() + " : " + ludcl.hashCode() + " : " + System.identityHashCode(ludcl) + "\n";
             ObjectStreamField f = fields[numPrimFields + i];
             objVals[i] = readObject0(f.isUnshared()); // this one
             if (objVals[i] == null) {
@@ -2443,7 +2445,7 @@ public class ObjectInputStream
                 result += "defaultReadFields objVals is: " + objVals[i].getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
             }
             ludcl = latestUserDefinedLoader();
-            result += "actual ludcl here: " + ludcl.getClass().getName() + " : " + ludcl.hashCode() + " : " + System.identityHashCode(ludcl) + "\n";
+            result += "actual ludcl defaultReadFields here: " + ludcl.getClass().getName() + " : " + ludcl.hashCode() + " : " + System.identityHashCode(ludcl) + "\n";
             if (f.getField() != null) {
                 handles.markDependency(objHandle, passHandle);
             }
@@ -2616,7 +2618,7 @@ public class ObjectInputStream
                     result += "readFields obj is: " + objVals[i].getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
                 }
                 ClassLoader cl = latestUserDefinedLoader();
-                result += "actual ludcl here: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
+                result += "actual ludcl readFields here: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
                 objHandles[i] = passHandle;
             }
             passHandle = oldHandle;
