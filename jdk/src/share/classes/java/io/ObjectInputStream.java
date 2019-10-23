@@ -586,7 +586,7 @@ public class ObjectInputStream
             } else {
                 result += "readObjectImpl obj is: " + obj.getClass().getName() + "\n";//" hash: " + objVals[i].hashCode() + "\n";
             }
-            cl = latestUserDefinedLoader();
+            ClassLoader cl = latestUserDefinedLoader();
             result += "actual ludcl readObjectImpl here: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
 
             handles.markDependency(outerHandle, passHandle);
