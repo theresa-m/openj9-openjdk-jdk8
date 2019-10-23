@@ -503,8 +503,6 @@ public class ObjectInputStream
                throws ClassNotFoundException, IOException
     {
         result += "enter readObjectImpl\n";
-        ClassLoader cl = latestUserDefinedLoader();
-        result += "actual ludcl readObjectImpl start: " + cl.getClass().getName() + " : " + cl.hashCode() + " : " + System.identityHashCode(cl) + "\n";
 
         if (enableOverride) {
             return readObjectOverride();
@@ -512,47 +510,72 @@ public class ObjectInputStream
 
         ClassLoader oldCachedLudcl = null;
     boolean setCached = false;
+
+
+    // TODO haven't added isClassCachingEnabled for this
     
     // if curContext == null or curContext != previousCurContext
     // code to test what should be done
     result += (curContext == null) ? "curContext is null\n" : "curContext name is: " + curContext.getDesc().getName() + "\n";
     result += (previousCurContext == null) ? "previousCurContext is null\n" : "previousCurContext name is: " + previousCurContext.getDesc().getName() + "\n";
-    if (curContext == null) {
+    if (curContext == null) { // refresh cache
         result += "curContext is null, cach ludcl " + latestUserDefinedLoader().getClass().getName() + "\n";
-    } else if( curContext == previousCurContext) {
-        result += "curContext and previousCurContext are the same, cach ludcl " + latestUserDefinedLoader().getClass().getName() + "\n";
-    } else {
-        result += "new curContext, use previously cached ludcl\n";
-    }
 
+        oldCachedLudcl = cachedLudcl;
+        if (caller == null) {
+                cachedLudcl = latestUserDefinedLoader();
+        }else{
+                cachedLudcl = caller.getClassLoader();
+        }
+        setCached = true;
+
+    } else if( curContext == previousCurContext) {
+        result += "curContext and previousCurContext are the same,  use previously cached ludcl\n";
+    } else { // refresh cache
+        result += "new curContext, cach ludcl " + latestUserDefinedLoader().getClass().getName() +"\n";
+
+        oldCachedLudcl = cachedLudcl;
+        if (caller == null) {
+                cachedLudcl = latestUserDefinedLoader();
+        }else{
+                cachedLudcl = caller.getClassLoader();
+        }
+        setCached = true;
+    }
 
     // set previousCurContext
     previousCurContext = curContext;
-	
-	if ((curContext == null) && (isClassCachingEnabled)) { // not nested
-            oldCachedLudcl = cachedLudcl;
 
-            // If caller is not provided, follow the standard path to get the cachedLudcl.
-            // Otherwise use the class loader provided by JIT as the cachedLudcl.
+    if (cachedLudcl == null) {
+        result += "cached ludcl is null ";
+    } else {
+        result += "cached ludcl: " + cachedLudcl.getClass().getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl) + "\n";
+    }
 
-            if (caller == null) {
-                 cachedLudcl = latestUserDefinedLoader();
-            }else{
-                 cachedLudcl = caller.getClassLoader();
-            }
+	// if ((curContext == null) && (isClassCachingEnabled)) { // not nested
+    //         oldCachedLudcl = cachedLudcl;
 
-            setCached = true;
+    //         // If caller is not provided, follow the standard path to get the cachedLudcl.
+    //         // Otherwise use the class loader provided by JIT as the cachedLudcl.
 
-            result += "cached ludcl: " + cachedLudcl.getClass().getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl) + "\n";
-        } else { // nested
-                result += "cache was not refreshed, curContext name is: " + curContext.getDesc().getName() + "\n";
-            if (cachedLudcl == null) {
-                result += "cached ludcl is null ";
-            } else {
-                result += "cached ludcl: " + cachedLudcl.getClass().getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl) + "\n";
-            }
+    //         if (caller == null) {
+    //              cachedLudcl = latestUserDefinedLoader();
+    //         }else{
+    //              cachedLudcl = caller.getClassLoader();
+    //         }
+
+    //         setCached = true;
+
+    //         result += "cached ludcl: " + cachedLudcl.getClass().getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl) + "\n";
+    //     } else { // nested
+    //             result += "cache was not refreshed, curContext name is: " + curContext.getDesc().getName() + "\n";
+    //         if (cachedLudcl == null) {
+    //             result += "cached ludcl is null ";
+    //         } else {
+    //             result += "cached ludcl: " + cachedLudcl.getClass().getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl) + "\n";
+    //         }
             
-        }
+    //     }
 
         // if nested read, passHandle contains handle of enclosing object
         int outerHandle = passHandle;
