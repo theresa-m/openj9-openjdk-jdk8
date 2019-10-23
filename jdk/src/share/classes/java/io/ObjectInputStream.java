@@ -520,7 +520,7 @@ public class ObjectInputStream
 
             result += "cached ludcl: " + cachedLudcl.getClass().getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl) + "\n";
         } else {
-                result += "cache was not refreshed ";
+                result += "cache was not refreshed, curContext name is: " + curContext.getDesc().getName();
             if (cachedLudcl == null) {
                 result += "cached ludcl is null ";
             } else {
