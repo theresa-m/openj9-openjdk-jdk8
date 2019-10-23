@@ -1407,9 +1407,10 @@ public class HashMap<K,V> extends AbstractMap<K,V>
             // Read the keys and values, and put the mappings in the HashMap
             for (int i = 0; i < mappings; i++) {
                 @SuppressWarnings("unchecked")
-                    K key = (K) s.readObject();
-                @SuppressWarnings("unchecked")
-                    V value = (V) s.readObject();
+
+                    K key = (K) s.readObject("this is the key for " + i); // this call
+                @SuppressWarnings("unchecked") 
+                    V value = (V) s.readObject("this is the value for " + i); // this call
                 putVal(hash(key), key, value, false, false);
             }
         }

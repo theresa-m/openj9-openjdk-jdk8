@@ -460,6 +460,14 @@ public class ObjectInputStream
         return readObjectImpl(null);
     }
 
+    // read object for debugging
+    public final Object readObject(String message)
+        throws IOException, ClassNotFoundException
+    {
+        result += "readObject special message: " + message + "\n";
+        return readObjectImpl(null);
+    }
+
     /**
      * Refer PR102778/PR110962/PR111232:
      * Whenever jit compiler encounters processing readObject() method
@@ -504,7 +512,7 @@ public class ObjectInputStream
         ClassLoader oldCachedLudcl = null;
 	boolean setCached = false;
 	
-	if ((curContext == null) && (isClassCachingEnabled)) {
+	if ((curContext == null) && (isClassCachingEnabled)) { // not nested
             oldCachedLudcl = cachedLudcl;
 
             // If caller is not provided, follow the standard path to get the cachedLudcl.
@@ -519,8 +527,8 @@ public class ObjectInputStream
             setCached = true;
 
             result += "cached ludcl: " + cachedLudcl.getClass().getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl) + "\n";
-        } else {
-                result += "cache was not refreshed, curContext name is: " + curContext.getDesc().getName();
+        } else { // nested
+                result += "cache was not refreshed, curContext name is: " + curContext.getDesc().getName() + "\n";
             if (cachedLudcl == null) {
                 result += "cached ludcl is null ";
             } else {
