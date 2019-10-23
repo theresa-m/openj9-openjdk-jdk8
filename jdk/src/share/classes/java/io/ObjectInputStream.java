@@ -508,26 +508,26 @@ public class ObjectInputStream
     if (curContext == null) { // refresh cache
         result += "curContext is null, cach ludcl " + latestUserDefinedLoader().getClass().getName() + "\n";
 
-        oldCachedLudcl = cachedLudcl;
-        if (caller == null) {
-                cachedLudcl = latestUserDefinedLoader();
-        }else{
-                cachedLudcl = caller.getClassLoader();
-        }
-        setCached = true;
+        // oldCachedLudcl = cachedLudcl;
+        // if (caller == null) {
+        //         cachedLudcl = latestUserDefinedLoader();
+        // }else{
+        //         cachedLudcl = caller.getClassLoader();
+        // }
+        // setCached = true;
 
     } else if( curContext == previousCurContext) {
         result += "curContext and previousCurContext are the same,  use previously cached ludcl\n";
     } else { // refresh cache
         result += "new curContext, cach ludcl " + latestUserDefinedLoader().getClass().getName() +"\n";
 
-        oldCachedLudcl = cachedLudcl;
-        if (caller == null) {
-                cachedLudcl = latestUserDefinedLoader();
-        }else{
-                cachedLudcl = caller.getClassLoader();
-        }
-        setCached = true;
+        // oldCachedLudcl = cachedLudcl;
+        // if (caller == null) {
+        //         cachedLudcl = latestUserDefinedLoader();
+        // }else{
+        //         cachedLudcl = caller.getClassLoader();
+        // }
+        // setCached = true;
     }
 
     // set previousCurContext
@@ -539,30 +539,30 @@ public class ObjectInputStream
         result += "cached ludcl: " + cachedLudcl.getClass().getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl) + "\n";
     }
 
-	// if ((curContext == null) && (isClassCachingEnabled)) { // not nested
-    //         oldCachedLudcl = cachedLudcl;
+	if ((curContext == null) && (isClassCachingEnabled)) { // not nested
+            oldCachedLudcl = cachedLudcl;
 
-    //         // If caller is not provided, follow the standard path to get the cachedLudcl.
-    //         // Otherwise use the class loader provided by JIT as the cachedLudcl.
+            // If caller is not provided, follow the standard path to get the cachedLudcl.
+            // Otherwise use the class loader provided by JIT as the cachedLudcl.
 
-    //         if (caller == null) {
-    //              cachedLudcl = latestUserDefinedLoader();
-    //         }else{
-    //              cachedLudcl = caller.getClassLoader();
-    //         }
+            if (caller == null) {
+                 cachedLudcl = latestUserDefinedLoader();
+            }else{
+                 cachedLudcl = caller.getClassLoader();
+            }
 
-    //         setCached = true;
+            setCached = true;
 
-    //         result += "cached ludcl: " + cachedLudcl.getClass().getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl) + "\n";
-    //     } else { // nested
-    //             result += "cache was not refreshed, curContext name is: " + curContext.getDesc().getName() + "\n";
-    //         if (cachedLudcl == null) {
-    //             result += "cached ludcl is null ";
-    //         } else {
-    //             result += "cached ludcl: " + cachedLudcl.getClass().getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl) + "\n";
-    //         }
+            result += "cached ludcl: " + cachedLudcl.getClass().getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl) + "\n";
+        } else { // nested
+                result += "cache was not refreshed, curContext name is: " + curContext.getDesc().getName() + "\n";
+            if (cachedLudcl == null) {
+                result += "cached ludcl is null ";
+            } else {
+                result += "cached ludcl: " + cachedLudcl.getClass().getName() + " : " + cachedLudcl.hashCode() + " : " + System.identityHashCode(cachedLudcl) + "\n";
+            }
             
-    //     }
+        }
 
         // if nested read, passHandle contains handle of enclosing object
         int outerHandle = passHandle;
@@ -661,7 +661,7 @@ public class ObjectInputStream
         ClassLoader oldCachedLudcl = null;
         boolean setCached = false; 
 
-        if ((curContext == null) && (isClassCachingEnabled)) {
+        if ((curContext == null) && (isClassCachingEnabled)) { // TODO add curContext to this part as well
             oldCachedLudcl = cachedLudcl;
             cachedLudcl = latestUserDefinedLoader();
             setCached = true;
