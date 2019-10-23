@@ -360,6 +360,7 @@ public class ObjectInputStream
  }
  }
     private ClassLoader cachedLudcl;
+    private SerialCallbackContext previousCurContext;
 
     /**
      * Creates an ObjectInputStream that reads from the specified InputStream.
@@ -510,7 +511,23 @@ public class ObjectInputStream
         }
 
         ClassLoader oldCachedLudcl = null;
-	boolean setCached = false;
+    boolean setCached = false;
+    
+    // if curContext == null or curContext != previousCurContext
+    // code to test what should be done
+    result += (curContext == null) ? "curContext is null\n" : "curContext name is: " + curContext.getDesc().getName() + "\n";
+    result += (previousCurContext == null) ? "previousCurContext is null\n" : "previousCurContext name is: " + previousCurContext.getDesc().getName() + "\n";
+    if (curContext == null) {
+        result += "curContext is null, cach ludcl " + latestUserDefinedLoader().getClass().getName() + "\n";
+    } else if( curContext == previousCurContext) {
+        result += "curContext and previousCurContext are the same, cach ludcl " + latestUserDefinedLoader().getClass().getName() + "\n";
+    } else {
+        result += "new curContext, use previously cached ludcl\n";
+    }
+
+
+    // set previousCurContext
+    previousCurContext = curContext;
 	
 	if ((curContext == null) && (isClassCachingEnabled)) { // not nested
             oldCachedLudcl = cachedLudcl;
