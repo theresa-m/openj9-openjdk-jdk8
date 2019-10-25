@@ -499,7 +499,7 @@ public class ObjectInputStream
         ClassLoader oldCachedLudcl = null;
         boolean setCached = false;
 
-        if (((null == curContext) || refreshLudcl) && (isClassCachingEnabled)) {
+        if ((curContext == null) && (isClassCachingEnabled)) {
             oldCachedLudcl = cachedLudcl;
 
             // If caller is not provided, follow the standard path to get the cachedLudcl.
@@ -512,7 +512,6 @@ public class ObjectInputStream
             }
 
             setCached = true;
-            refreshLudcl = false;
         }
 
         // if nested read, passHandle contains handle of enclosing object
@@ -612,11 +611,10 @@ public class ObjectInputStream
         ClassLoader oldCachedLudcl = null;
         boolean setCached = false; 
 
-        if (((null == curContext) || refreshLudcl) && (isClassCachingEnabled)) {
+        if ((curContext == null) && (isClassCachingEnabled)) {
             oldCachedLudcl = cachedLudcl;
             cachedLudcl = latestUserDefinedLoader();
             setCached = true;
-            refreshLudcl = false;
         }
 
         // if nested read, passHandle contains handle of enclosing object
